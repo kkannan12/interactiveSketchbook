@@ -29,7 +29,7 @@ function draw() {
 
     textSize(32);
     fill(255);
-    text("Time: " - remaining, width/2, 50);
+    text("Time: " + remaining, width/2, 50);
 
     if (elapsed>timeLimit) {
         offset=0;
