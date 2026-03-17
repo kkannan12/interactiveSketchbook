@@ -1,40 +1,59 @@
-let circleY;
-let squareSize = 200;
-let circleSize = 80;
+let cubeSize = 200;
+let size = 60;
+
+let shapeY = 0;
 let floating = false;
 
+let shapeType = 0;   // 0 sphere, 1 box, 2 cone
+let hasShape = false; // <-- start empty
+
+
+
 function setup() {
-  createCanvas(700, 500);
-  circleY = height / 2; // start in center
+  createCanvas(700, 500, WEBGL);
 }
+
+
+
 
 function draw() {
   background(220);
 
-  // Draw square in center
-  rectMode(CENTER);
-  fill(255);
-  rect(width / 2, height / 2, squareSize, squareSize);
 
-  // Draw circle inside square
-  fill(0);
-  ellipse(width / 2, circleY, circleSize, circleSize);
+  // cube wireframe
+  noFill();
+  stroke(0);
+  box(cubeSize);
 
-  let squareTop = height/2 - squareSize/2;
-  let stopPoint = squareTop - circleSize/4;
-
-  fill(0);
-  ellipse(width / 2, circleY,circleSize, circleSize);
+  
 
 
+  // only animate/draw AFTER a shape exists
+  if (hasShape) {
+    let cubeTop = -cubeSize / 2;
+    let stopPoint = cubeTop - size;
 
+    if (floating && shapeY > stopPoint) {
+      shapeY -= 1;
+    }
 
-  // If key pressed, float upward slowly
- if (floating && circleY > height/2 - squareSize/2 + circleSize/2) {
-  circleY -= 1;
-}
+    // draw random shape
+    push();
+    translate(0, shapeY, 0);
+    noStroke();
+    fill(0);
+
+    if (shapeType === 0) sphere(size);
+    else if (shapeType === 1) box(size);
+    else cone(size, size * 1.5);
+
+    pop();
+  }
 }
 
 function mousePressed() {
-  floating = true;
+  hasShape = true;           // now we will draw a shape
+  shapeY = 0;                // start in center
+  floating = true;           // start moving
+  shapeType = floor(random(3)); // choose random shape
 }
