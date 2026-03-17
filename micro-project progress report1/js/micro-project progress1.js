@@ -26,7 +26,7 @@ let won = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  ortho();
+  ortho(); // fixes cube distortion
 
   sign = createGraphics(200, 80);
   sign.clear();
@@ -59,7 +59,6 @@ function draw() {
       floating = true;
       shapeY = 0;
 
-      // match in order from left to right
       for (let i = 0; i < targets.length; i++) {
         if (!matched[i]) {
           if (targets[i] === shapeType) {
@@ -73,15 +72,15 @@ function draw() {
 
   rotateY(shakeAngle);
 
-// move entire cube system down
-translate(0, 100, 0);
+  // move cube DOWN
+  translate(0, 100, 0);
 
-// cube
-noFill();
-stroke(40);
-box(cubeSize);
+  // cube
+  noFill();
+  stroke(40);
+  box(cubeSize);
 
-  // press me sign
+  // sign
   push();
   translate(0, 0, cubeSize / 2 + 1);
   noStroke();
@@ -100,30 +99,30 @@ box(cubeSize);
 
     push();
     translate(0, shapeY, 0);
+    fill(40);
     noStroke();
-    fill(0);
     drawShape(shapeType, size);
     pop();
   }
 
   // win trigger
   if (!confettiStarted && matched[0] && matched[1] && matched[2]) {
-  confettiStarted = true;
-  won = true;
+    confettiStarted = true;
+    won = true;
 
-  for (let i = 0; i < 120; i++) {
-    confetti.push({
-      x: width / 2 + random(-40, 40),
-      y: height / 2 - cubeSize / 2 - 40 + random(-20, 20),
-      vx: random(-1.5, 1.5),
-      vy: random(2, 5),
-      size: random(5, 10),
-      r: random(255),
-      g: random(255),
-      b: random(255)
-    });
+    for (let i = 0; i < 120; i++) {
+      confetti.push({
+        x: width / 2 + random(-40, 40),
+        y: height / 2 + 100 - cubeSize / 2 - 40,
+        vx: random(-1.5, 1.5),
+        vy: random(2, 5),
+        size: random(5, 10),
+        r: random(255),
+        g: random(255),
+        b: random(255)
+      });
+    }
   }
-}
 
   drawTargets();
   drawConfetti();
@@ -133,69 +132,56 @@ box(cubeSize);
 function mousePressed() {
   hasShape = false;
   floating = false;
-
   shapeType = floor(random(3));
-
   shaking = true;
   startTime = millis();
 }
 
 function drawShape(type, s) {
-  if (type === 0) {
-    sphere(s);
-  } else if (type === 1) {
-    box(s);
-  } else {
-    cone(s, s * 1.5);
-  }
+  if (type === 0) sphere(s);
+  else if (type === 1) box(s);
+  else cone(s, s * 1.5);
 }
 
+// TARGETS (LEFT SIDE)
 function drawTargets() {
   push();
   resetMatrix();
   translate(-width / 2, -height / 2);
 
-  fill(0);
-  noStroke();
-  textAlign(LEFT, CENTER);
+  fill(40);
   textSize(16);
-  text("Match these:", 40, 40);
+  text("Match:", 40, 40);
 
   for (let i = 0; i < 3; i++) {
-    let spacing = 70;
-    let x = 80 + i * spacing;
-    let y = 100;
+    let x = 60 + i * 70;
+    let y = 90;
 
-    // reset drawing style for each shape
-    fill(0);
+    fill(40);
     noStroke();
 
-    if (targets[i] === 0) {
-      ellipse(x, y, 40, 40);
-    } else if (targets[i] === 1) {
-      rectMode(CENTER);
-      rect(x, y, 40, 40);
-    } else {
-      triangle(x - 20, y + 20, x + 20, y + 20, x, y - 20);
-    }
+    if (targets[i] === 0) ellipse(x, y, 40);
+    else if (targets[i] === 1) rectMode(CENTER), rect(x, y, 40, 40);
+    else triangle(x - 20, y + 20, x + 20, y + 20, x, y - 20);
 
-    // draw green checkmark
     if (matched[i]) {
       stroke(0, 180, 0);
       strokeWeight(4);
       noFill();
 
-      line(x + 12, y + 5, x + 20, y + 14);
-      line(x + 20, y + 14, x + 34, y - 10);
+      line(x + 10, y + 5, x + 18, y + 12);
+      line(x + 18, y + 12, x + 30, y - 8);
     }
   }
 
   pop();
 }
 
+// CONFETTI (FIXED POSITION)
 function drawConfetti() {
   push();
   resetMatrix();
+  translate(-width / 2, -height / 2);
 
   for (let c of confetti) {
     c.x += c.vx;
@@ -209,18 +195,19 @@ function drawConfetti() {
   pop();
 }
 
+// WIN TEXT
 function drawWinMessage() {
   if (won) {
     push();
     resetMatrix();
+    translate(-width / 2, -height / 2);
 
+    fill(40);
     textAlign(CENTER, CENTER);
     textSize(42);
     textStyle(BOLD);
-    fill(0);
-    noStroke();
 
-    text("YOU WIN!", width / 2, height / 2 + cubeSize / 2 + 100);
+    text("YOU WIN!", width / 2, height / 2 + cubeSize / 2 + 120);
 
     pop();
   }
