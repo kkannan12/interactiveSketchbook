@@ -1,5 +1,5 @@
-let cubeSize = 200;
-let size = 40;
+let cubeSize = 250;
+let size = 50;
 
 let shapeY = 0;
 let floating = false;
@@ -11,7 +11,7 @@ let sign;
 // shaking
 let shaking = false;
 let startTime = 0;
-let shakeDuration = 3000;
+let shakeDuration = 2000;
 
 // matching
 let targets = [];
@@ -51,7 +51,7 @@ function draw() {
   if (shaking) {
     let elapsed = millis() - startTime;
     let fade = 1 - (elapsed / shakeDuration);
-    shakeAngle = sin(elapsed * 0.015) * 0.08 * fade;
+    shakeAngle = sin(elapsed * 0.030) * 0.08 * fade;
 
     if (elapsed > shakeDuration) {
       shaking = false;
@@ -130,17 +130,39 @@ function draw() {
 }
 
 function mousePressed() {
-  hasShape = false;
-  floating = false;
-  shapeType = floor(random(3));
-  shaking = true;
-  startTime = millis();
+  // center of cube on screen
+  let cubeX = width / 2;
+  let cubeY = height / 2 + 100; // same as translate(0,100,0)
+
+  let half = cubeSize / 2;
+
+  // check if mouse is inside cube area
+  if (
+    mouseX > cubeX - half &&
+    mouseX < cubeX + half &&
+    mouseY > cubeY - half &&
+    mouseY < cubeY + half
+  ) {
+    hasShape = false;
+    floating = false;
+    shapeType = floor(random(3));
+    shaking = true;
+    startTime = millis();
+  }
 }
 
 function drawShape(type, s) {
-  if (type === 0) sphere(s);
-  else if (type === 1) box(s);
-  else cone(s, s * 1.5);
+  if (type === 0) {
+    sphere(s);
+  } else if (type === 1) {
+    box(s);
+  } else {
+    beginShape();
+    vertex(-s, s);
+    vertex(s, s);
+    vertex(0, -s);
+    endShape(CLOSE);
+  }
 }
 
 // TARGETS (LEFT SIDE)
