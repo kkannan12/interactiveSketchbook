@@ -105,3 +105,79 @@ h2 {
   font-weight: bold;
   cursor: pointer;
 }
+
+
+
+
+@media (max-width: 600px) {
+  header {
+    height: 98px;
+    justify-content: flex-end;
+    padding: 0 28px;
+  }
+
+  nav a {
+    display: none;
+  }
+
+  nav::after {
+    content: "☰";
+    color: white;
+    font-size: 34px;
+  }
+
+  main {
+    padding: 30px 22px;
+  }
+
+  .intro {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-top: 0;
+  }
+
+  h2 {
+    display: none;
+  }
+
+  .how-button {
+    font-size: 13px;
+    padding: 12px 14px;
+    border-radius: 7px;
+  }
+
+  .shapes {
+    margin-top: 86px;
+    gap: 10px;
+  }
+
+  .triangle {
+    border-left: 24px solid transparent;
+    border-right: 24px solid transparent;
+    border-bottom: 40px solid white;
+  }
+
+  .circle {
+    width: 48px;
+    height: 48px;
+  }
+
+  .square {
+    width: 45px;
+    height: 41px;
+  }
+
+  .game-area {
+    margin-top: 120px;
+  }
+
+  .press-box {
+    width: 170px;
+    height: 165px;
+    font-size: 20px;
+  }
+}
